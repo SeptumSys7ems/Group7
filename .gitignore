@@ -1,0 +1,46 @@
+
+node_modules/
+
+package-lock.json
+
+.env
+.env.local
+.env*.local
+
+creds.json
+*-credentials.json
+*-key.json
+
+build/
+dist/
+out/
+.next/
+
+# Testing
+coverage/
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.history/
+*.sublime*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Uploaded files
+uploads/*
+!uploads/.gitkeep
+
+# Temporary files
+.tmp/
+.temp/
+.cache/
+
+# System files
+Thumbs.db
