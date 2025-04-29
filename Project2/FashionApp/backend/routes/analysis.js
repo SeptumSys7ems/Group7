@@ -151,6 +151,7 @@ router.get('/:id', authenticateUser, async (req, res) => {
                     type: item.type || 'Fashion It',
                     brand: item.brand || 'Brand',
                     name: item.name || 'Fashion em',
+                    item.price = item.price.replace(',', '')
                     price: typeof item.price === 'number' ? item.price : parseFloat(item.price.replace('$', '')) || (isPremium ? 159.99 : 39.99),
                     imageUrl: (item.imageUrl && item.imageUrl !== '#' && item.imageUrl !== 'placeholder.jpg') 
                         ? item.imageUrl 
