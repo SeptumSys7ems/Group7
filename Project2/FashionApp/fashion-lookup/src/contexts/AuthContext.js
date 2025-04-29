@@ -30,10 +30,6 @@ export function AuthProvider({ children }) {
         return signInWithPopup(auth, provider);
     }
 
-    function currentUser() {
-        return auth.currentUser;
-    }
-
     /**
      * Sign out the current user
      */

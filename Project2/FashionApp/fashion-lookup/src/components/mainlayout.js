@@ -5,7 +5,7 @@ import './mainlayout.css';
 import FashionLogo from '../assets/FashionLogo';
 
 function MainLayout() {
-  const { logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
 
   async function handleLogout() {
@@ -33,7 +33,11 @@ function MainLayout() {
           <Link to="/" className="nav-link">Home</Link>
           <Link to="/about" className="nav-link">About</Link>
           <Link to="/contact" className="nav-link">Contact</Link>
-          <button onClick={handleLogout} className="nav-link signout-button">Signout</button>
+          {!currentUser ? (
+            <Link to="/login" className="nav-link">Sign in</Link>
+          ) : (
+            <button onClick={handleLogout} className="nav-link signout-button">Sign out</button>
+          )}
         </nav>
       </header>
 
