@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import './imageupload.css';
 
+// Initializes variables for Google Photo Picker API
+// CLIENT_ID, API_KEY, SCOPES
 const GooglePhotoPicker = () => {
     const [apiLoaded, setApiLoaded] = useState(false);
     const [error, setError] = useState(null);
@@ -28,12 +30,13 @@ const GooglePhotoPicker = () => {
 
     const tokenClient = React.useRef(null);
 
-
+    // Debug method
     const debug = (msg) => {
         console.log('[DEBUG]', msg);
         setDebugLogs(prev => [...prev, msg]);
     };
 
+    // Downloads debug logs
     const downloadLogs = () => {
         const content = debugLogs.join('\n');
         const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
@@ -138,6 +141,11 @@ const GooglePhotoPicker = () => {
         tokenClient.current.requestAccessToken({ prompt: 'consent' }); 
     };
 
+    /**
+     * Displays the Google photo picker window
+     * @param {} accessToken - oAuth Token
+     * @returns {} - Google photo image
+     */
     const createAndShowPicker = (accessToken) => {
         debug('Creating picker...');
         if (!window.google?.picker) {
