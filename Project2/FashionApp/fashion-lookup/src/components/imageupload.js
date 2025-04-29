@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import GooglePhotosPicker from './photoPicker.js';
 import axios from 'axios';
 import './imageupload.css';
 
@@ -113,6 +114,7 @@ function ImageUpload({ onImageAnalyzed, onSuccess }) {
                         <span className="upload-icon" role="img" aria-label="camera">📷</span>
                         <p>Drag & drop an image or click to browse</p>
                     </div>
+
                 )}
                 
                 <input
@@ -124,6 +126,9 @@ function ImageUpload({ onImageAnalyzed, onSuccess }) {
                 />
             </div>
 
+            <div className="">
+                <GooglePhotosPicker />
+            </div>
             {error && <p className="upload-error">{error}</p>}
 
             {file && !uploading && (
