@@ -156,15 +156,9 @@ router.get('/:id', authenticateUser, async (req, res) => {
                     type: item.type || 'Fashion It',
                     brand: item.brand || 'Brand',
                     name: item.name || 'Fashion em',
-<<<<<<< HEAD
-                    price: typeof item.price === 'number' ? item.price : parseFloat(item.price.replace(',', '').replace('$', '')) || (isPremium ? 159.99 : 39.99),
-                    imageUrl: (item.imageUrl && item.imageUrl !== '#' && item.imageUrl !== 'placeholder.jpg') 
-                        ? item.imageUrl 
-=======
                     price: typeof cleanPrice === 'number' ? cleanPrice : parseFloat((cleanPrice || '').replace('$', '')) || (isPremium ? 159.99 : 39.99),
                     imageUrl: (item.imageUrl && item.imageUrl !== '#' && item.imageUrl !== 'placeholder.jpg')
                         ? item.imageUrl
->>>>>>> dbeaab1d58ac34bbc1ee920182df9f7699ae9d4c
                         : `https://via.placeholder.com/500x600/${bgColor}/${textColor}?text=${encodedText}`,
                     productUrl: (item.productUrl && item.productUrl !== '#')
                         ? item.productUrl
