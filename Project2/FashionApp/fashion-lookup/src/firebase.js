@@ -1,8 +1,10 @@
-// src/firebase.js
+// Import necessary Firebase modules
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
+// Firebase configuration object
+// Values are loaded securely from environment variables
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -12,8 +14,12 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
+// Initialize Firebase app with the provided config
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Authentication and Firestore services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+// Export the initialized Firebase app instance (optional)
 export default app;

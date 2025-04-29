@@ -1,18 +1,24 @@
+// src/components/contactpage.js
+
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import './contactpage.css';
+import './contactpage.css'; // Import custom styling
 
 function ContactPage() {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth(); // Get the logged-in user (if any)
+
+  // Form state, pre-filled with user's name and email if logged in
   const [formData, setFormData] = useState({
     name: currentUser?.displayName || '',
     email: currentUser?.email || '',
     subject: '',
     message: ''
   });
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('');
 
+  const [submitted, setSubmitted] = useState(false); // Track if form was submitted
+  const [error, setError] = useState(''); // Track validation errors
+
+  // Update form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -21,30 +27,32 @@ function ContactPage() {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Form validation
+
+    // Simple client-side validation
     if (!formData.name || !formData.email || !formData.subject || !formData.message) {
       setError('Please fill in all fields');
       return;
     }
-    
-    // Email validation
+
+    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address');
       return;
     }
-    
-    // In a real app, you would send this data to your backend
+
+    // Simulate sending the message (replace this with backend call)
     console.log('Form submitted:', formData);
-    
-    // Show success message
+
+    // Mark as submitted
     setSubmitted(true);
     setError('');
   };
 
+  // Show success message after form submission
   if (submitted) {
     return (
       <div className="contact-container">
@@ -70,6 +78,7 @@ function ContactPage() {
     );
   }
 
+  // Main contact form UI
   return (
     <div className="contact-container">
       <div className="contact-header">
@@ -78,10 +87,11 @@ function ContactPage() {
       </div>
 
       <div className="contact-content">
+        {/* Contact form section */}
         <div className="contact-form-container">
           <form className="contact-form" onSubmit={handleSubmit}>
             {error && <div className="form-error">{error}</div>}
-            
+
             <div className="form-group">
               <label htmlFor="name">Your Name</label>
               <input
@@ -92,7 +102,7 @@ function ContactPage() {
                 onChange={handleChange}
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
               <input
@@ -103,7 +113,7 @@ function ContactPage() {
                 onChange={handleChange}
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="subject">Subject</label>
               <input
@@ -114,7 +124,7 @@ function ContactPage() {
                 onChange={handleChange}
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="message">Message</label>
               <textarea
@@ -125,19 +135,20 @@ function ContactPage() {
                 onChange={handleChange}
               ></textarea>
             </div>
-            
+
             <button type="submit" className="submit-button">
               Send Message
             </button>
           </form>
         </div>
-        
+
+        {/* Static contact info */}
         <div className="contact-info">
           <div className="info-section">
             <h3>Email Us</h3>
             <p>support@fashionlookup.com</p>
           </div>
-          
+
           <div className="info-section">
             <h3>Social Media</h3>
             <div className="social-links">
@@ -146,12 +157,16 @@ function ContactPage() {
               <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" className="social-link">Pinterest</a>
             </div>
           </div>
-          
+
           <div className="info-section">
             <h3>Office</h3>
-            <p>Fashion District<br />123 Style Avenue<br />New York, NY 10001</p>
+            <p>
+              Fashion District<br />
+              123 Style Avenue<br />
+              New York, NY 10001
+            </p>
           </div>
-          
+
           <div className="info-section">
             <h3>Hours</h3>
             <p>
