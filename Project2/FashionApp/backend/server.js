@@ -35,7 +35,7 @@ admin.initializeApp({
 const app = express();
 
 const corsOptions = {
-    origin: ['*','http://localhost:3000'],
+    origin: ['*', 'http://localhost:3000', 'https://frontend-dot-fashionthief-a6f61.uc.r.appspot.com'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -69,8 +69,8 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
 });
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server listening on port ${PORT}`);
 });
