@@ -11,7 +11,7 @@ const GooglePhotosPicker = () => {
 
     // Handle Google Sign-In
     const handleSignIn = () => {
-        google.accounts.oauth2.initTokenClient({
+        const tokenClient = window.google.accounts.oauth2.initTokenClient({
             client_id: CLIENT_ID,
             scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
             callback: (tokenResponse) => {

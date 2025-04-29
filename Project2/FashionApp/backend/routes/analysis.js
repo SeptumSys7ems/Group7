@@ -57,9 +57,9 @@ router.post('/', authenticateUser, async (req, res) => {
                 const textColor = 'ffffff';
                 
                 return {
-                    type: item.type || 'Fashion Item',
+                    type: item.type || 'Apperal Type',
                     brand: item.brand || 'Brand',
-                    name: item.name || 'Fashion Item',
+                    name: item.name || item.description || 'hostess Item',
                     price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || (isPremium ? 159.99 : 39.99),
                     imageUrl: (item.imageUrl && item.imageUrl !== '#' && item.imageUrl !== 'placeholder.jpg') 
                         ? item.imageUrl 
@@ -140,7 +140,7 @@ router.get('/:id', authenticateUser, async (req, res) => {
             
             return options.map((item, index) => {
                 // Create descriptive placeholder text for the image
-                const placeholderText = `${item.brand || ''} ${item.name || ''} ${item.type || 'Fashion Item'}`.trim();
+                const placeholderText = `${item.brand || ''} ${item.name || ''} ${item.type || 'Fashn Item'}`.trim();
                 const encodedText = encodeURIComponent(placeholderText);
                 
                 // Generate appropriate colors for premium vs affordable
@@ -148,9 +148,9 @@ router.get('/:id', authenticateUser, async (req, res) => {
                 const textColor = 'ffffff';
                 
                 return {
-                    type: item.type || 'Fashion Item',
+                    type: item.type || 'Fashion It',
                     brand: item.brand || 'Brand',
-                    name: item.name || 'Fashion Item',
+                    name: item.name || 'Fashion em',
                     price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || (isPremium ? 159.99 : 39.99),
                     imageUrl: (item.imageUrl && item.imageUrl !== '#' && item.imageUrl !== 'placeholder.jpg') 
                         ? item.imageUrl 

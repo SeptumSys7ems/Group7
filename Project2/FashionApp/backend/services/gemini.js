@@ -32,16 +32,23 @@ async function enrichOption(option) {
                 ? firstResult.thumbnail
                 : `https://via.placeholder.com/400x600/888888/ffffff?text=${encodeURIComponent(option.brand || 'Fashion Item')}`;
             option.productUrl = firstResult.link || `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            
         } else {
             option.imageUrl = `https://via.placeholder.com/400x600/888888/ffffff?text=${encodeURIComponent(option.brand || 'Fashion Item')}`;
             option.productUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
             option.price = 'TBD';
         }
+        option.name = `${option.brand} ${option.description}`;
     } catch (error) {
         console.error('Error enriching option:', error);
-        option.imageUrl = `https://via.placeholder.com/400x600/888888/ffffff?text=${encodeURIComponent(option.brand || 'Fashion Item')}`;
-        option.productUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-        option.price = 'TBD';
+    
+        const fallbackText = option.brand && option.description 
+            ? `${option.brand} ${option.description}` 
+            : option.brand || option.description || 'Fashion Item';
+    
+        option.imageUrl = `https://via.placeholder.com/400x600/888888/ffffff?text=${encodeURIComponent(fallbackText)}`;
+        option.productUrl = `https://www.google.com/search?q=${encodeURIComponent(fallbackText)}`;
+        option.price = 'Price Unavailable';
     }
 }
 
@@ -67,11 +74,12 @@ Labels: ${detectedLabels}
 Objects: ${detectedObjects}
 
 For each detected clothing item:
-- Identify exact product type (not just 'shirt' - use specifics like 'oxford shirt', 'chino pants')
-- Suggest two premium (expensive) products ($80-300) and two affordable products ($20-80)
-- Provide real product names and brands that can be searched for shopping
+- Identify exact product type (e.g., "linen oxford shirt", "chino pants", "Chelsea boots")
+- Suggest at least 3-5 premium (expensive) products ($80-300) and 3-5 affordable products ($20-80)
+- Provide realistic product names and actual brand names
+- Keep the JSON structure simple
 
-Output strictly in this JSON structure:
+Strictly output only valid JSON, matching this format:
 {
   "detectedItems": [
     { "type": "Shirt", "description": "Light blue linen oxford shirt" }
@@ -83,8 +91,9 @@ Output strictly in this JSON structure:
     { "brand": "Uniqlo", "description": "Easy Care Dress Shirt" }
   ]
 }
-Only return JSON, no extra commentary.
+Only Return JSON,Do not add extra commentary.
 `;
+
 
         const result = await model.generateContent(prompt);
         const response = await result.response;

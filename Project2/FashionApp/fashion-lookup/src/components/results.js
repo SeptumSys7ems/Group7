@@ -18,15 +18,15 @@ function ResultsPage() {
     async function fetchAnalysis() {
       try {
         setLoading(true);
-        
+
         if (!analysisId) {
           setError('No analysis ID provided');
           setLoading(false);
           return;
         }
-        
+
         const data = await getAnalysis(analysisId);
-        console.log("Fetched analysis data:", data);
+        console.log('Fetched analysis data:', data);
         setResults(data);
       } catch (error) {
         console.error('Analysis fetch error:', error);
@@ -35,11 +35,10 @@ function ResultsPage() {
         setLoading(false);
       }
     }
-    
+
     fetchAnalysis();
   }, [analysisId]);
-  
-  // Handle image loading errors
+
   const handleImageError = (index) => {
     console.log(`Image at index ${index} failed to load`);
     setImageErrors(prev => ({
@@ -48,32 +47,21 @@ function ResultsPage() {
     }));
   };
 
-  // Generate placeholder image URL with improved text
   const getPlaceholderImage = (item, isPremium) => {
-    let text = 'Fashion Item';
-    if (item.brand && item.name) {
-      text = `${item.brand} ${item.name}`;
-    } else if (item.type) {
-      text = item.type;
-    } else if (item.name) {
-      text = item.name;
-    }
-    
-    // Different colors for premium vs affordable
+    let text = item.brand && item.name ? `${item.brand} ${item.name}` : item.type || 'Fashonista';
     const bgColor = isPremium ? '3e4095' : '4CAF50';
     const textColor = 'ffffff';
-    
     return `https://via.placeholder.com/500x600/${bgColor}/${textColor}?text=${encodeURIComponent(text)}`;
   };
-  
+
   const handleBackClick = () => {
     navigate('/');
   };
-  
+
   if (loading) {
     return <div className="results-loading">Loading results...</div>;
   }
-  
+
   if (error) {
     return (
       <div className="results-error">
@@ -82,7 +70,7 @@ function ResultsPage() {
       </div>
     );
   }
-  
+
   if (!results) {
     return (
       <div className="no-results">
@@ -91,11 +79,9 @@ function ResultsPage() {
       </div>
     );
   }
-  
+
   const { imageUrl, detectedItems, expensiveOptions, affordableOptions } = results;
-  const options = activeTab === 'premium' ? 
-    (expensiveOptions || []) : 
-    (affordableOptions || []);
+  const options = activeTab === 'premium' ? (expensiveOptions || []) : (affordableOptions || []);
 
   return (
     <div className="results-page">
@@ -103,7 +89,7 @@ function ResultsPage() {
         <h1>FashionThief Results</h1>
         <Link to="/" className="back-button">Back to Feed</Link>
       </div>
-      
+
       <div className="results-container">
         <div className="original-outfit-section">
           <div className="outfit-card">
@@ -114,13 +100,13 @@ function ResultsPage() {
                 alt="Original outfit" 
                 className="outfit-image"
                 onError={(e) => {
-                  console.log("Original image failed to load");
+                  console.log('Original image failed to load');
                   e.target.onerror = null;
-                  e.target.src = "https://via.placeholder.com/600x800/888888/ffffff?text=Original+Outfit";
+                  e.target.src = 'https://via.placeholder.com/600x800/888888/ffffff?text=Original+Outfit';
                 }} 
               />
             </div>
-            
+
             <div className="detected-items">
               <h3>Detected Items</h3>
               <ul>
@@ -139,7 +125,7 @@ function ResultsPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="alternatives-section">
           <div className="alternatives-tabs">
             <button 
@@ -155,7 +141,7 @@ function ResultsPage() {
               Affordable Options
             </button>
           </div>
-          
+
           {options.length === 0 ? (
             <div className="no-options">
               <p>No {activeTab} options found for this outfit.</p>
@@ -163,49 +149,53 @@ function ResultsPage() {
           ) : (
             <div className="alternatives-grid">
               {options.map((item, index) => {
-                  const isPremium = activeTab === 'premium';
-                  const placeholderSrc = getPlaceholderImage(item, isPremium);
-                  let imageSrc = item.imageUrl;
+                const isPremium = activeTab === 'premium';
+                const placeholderSrc = getPlaceholderImage(item, isPremium);
+                let imageSrc = item.imageUrl;
 
-                  if (imageErrors[index] || !imageSrc) {
-                      imageSrc = placeholderSrc;
-                  }
+                if (imageErrors[index] || !imageSrc || imageSrc.includes('placeholder.jpg') || imageSrc === '#') {
+                  imageSrc = placeholderSrc;
+                }
 
-                  return (
-                      <div key={index} className="product-card">
-                          <div className="product-image-container">
-                              <img 
-                                  src={imageSrc}
-                                  alt={item.description || 'Fashion item'} 
-                                  className="product-image"
-                                  onError={() => handleImageError(index)}
-                              />
-                          </div>
-                          <div className="product-details">
-                              <h4 className="product-name">{item.description || item.type || 'Fashion Item'}</h4>
-                              <p className="product-brand">{item.brand || 'Unknown Brand'}</p>
-                              <p className={`product-price ${isPremium ? 'premium' : 'affordable'}`}>
-                                  {item.price && typeof item.price === 'string' && item.price.includes('$')
-                                      ? item.price
-                                      : (typeof item.price === 'number' 
-                                          ? `$${item.price.toFixed(2)}` 
-                                          : 'Price Unavailable')}
-                              </p>
-                              <a 
-                                  href={item.productUrl || `https://www.google.com/search?q=${encodeURIComponent(item.brand + ' ' + (item.description || 'fashion item'))}`} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer" 
-                                  className="product-button"
-                              >
-                                  View Product
-                              </a>
-                          </div>
-                      </div>
-                  );
+                return (
+                  <div key={index} className="product-card">
+                    <div className="product-image-container">
+                      <img 
+                        src={imageSrc}
+                        alt={item.name || item.description || 'Decourm Garnment'} 
+                        className="product-image"
+                        onError={() => handleImageError(index)}
+                      />
+                    </div>
+                    <div className="product-details">
+                      <h4 className="product-name">
+                        {(item.name && item.name !== 'placeholder.jpg') 
+                          ? item.name 
+                          : (item.description || item.type || 'Clothing Option')}
+                      </h4>
+                      <p className="product-brand">{item.brand || 'Unknown Brand'}</p>
+                      <p className={`product-price ${isPremium ? 'premium' : 'affordable'}`}>
+                        {item.price && typeof item.price === 'string' && item.price.includes('$')
+                          ? item.price
+                          : (typeof item.price === 'number' 
+                            ? `$${item.price.toFixed(2)}` 
+                            : 'Price Unavailable')}
+                      </p>
+                      <a 
+                        href={item.productUrl && item.productUrl !== '#' ? item.productUrl : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || item.description || 'fashion item'))}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="product-button"
+                      >
+                        View Product
+                      </a>
+                    </div>
+                  </div>
+                );
               })}
             </div>
           )}
-          
+
           <div className="sharing-options">
             <h3>Share your fashion find</h3>
             <div className="share-buttons">
