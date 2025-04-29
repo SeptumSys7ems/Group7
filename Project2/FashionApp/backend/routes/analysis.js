@@ -60,7 +60,7 @@ router.post('/', authenticateUser, async (req, res) => {
                     type: item.type || 'Apperal Type',
                     brand: item.brand || 'Brand',
                     name: item.name || item.description || 'hostess Item',
-                    price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || (isPremium ? 159.99 : 39.99),
+                    price: typeof item.price === 'number' ? item.price : parseFloat(item.price.replace('$', '')) || (isPremium ? 159.99 : 39.99),
                     imageUrl: (item.imageUrl && item.imageUrl !== '#' && item.imageUrl !== 'placeholder.jpg') 
                         ? item.imageUrl 
                         : `https://via.placeholder.com/500x600/${bgColor}/${textColor}?text=${encodedText}`,
