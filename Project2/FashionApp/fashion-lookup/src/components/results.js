@@ -163,48 +163,45 @@ function ResultsPage() {
           ) : (
             <div className="alternatives-grid">
               {options.map((item, index) => {
-                // Determine the image source
-                const isPremium = activeTab === 'premium';
-                const placeholderSrc = getPlaceholderImage(item, isPremium);
-                
-                // Use the image URL unless it's an error or placeholder.jpg
-                let imageSrc = item.imageUrl;
-                
-                // If it's a basic placeholder or the image previously errored, use our enhanced placeholder
-                if (imageErrors[index] || 
-                    !imageSrc || 
-                    imageSrc === 'placeholder.jpg' || 
-                    imageSrc === '#') {
-                  imageSrc = placeholderSrc;
-                }
-                
-                return (
-                  <div key={index} className="product-card">
-                    <div className="product-image-container">
-                      <img 
-                        src={imageSrc}
-                        alt={item.name || 'Fashion item'} 
-                        className="product-image"
-                        onError={() => handleImageError(index)}
-                      />
-                    </div>
-                    <div className="product-details">
-                      <h4 className="product-name">{item.name || 'Fashion Item'}</h4>
-                      <p className="product-brand">{item.brand || 'Brand'}</p>
-                      <p className={`product-price ${isPremium ? 'premium' : 'affordable'}`}>
-                        ${typeof item.price === 'number' ? item.price.toFixed(2) : '99.99'}
-                      </p>
-                      <a 
-                        href={item.productUrl && item.productUrl !== '#' ? item.productUrl : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || '') + ' ' + (item.type || 'fashion item'))}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="product-button"
-                      >
-                        View Product
-                      </a>
-                    </div>
-                  </div>
-                );
+                  const isPremium = activeTab === 'premium';
+                  const placeholderSrc = getPlaceholderImage(item, isPremium);
+                  let imageSrc = item.imageUrl;
+
+                  if (imageErrors[index] || !imageSrc) {
+                      imageSrc = placeholderSrc;
+                  }
+
+                  return (
+                      <div key={index} className="product-card">
+                          <div className="product-image-container">
+                              <img 
+                                  src={imageSrc}
+                                  alt={item.description || 'Fashion item'} 
+                                  className="product-image"
+                                  onError={() => handleImageError(index)}
+                              />
+                          </div>
+                          <div className="product-details">
+                              <h4 className="product-name">{item.description || item.type || 'Fashion Item'}</h4>
+                              <p className="product-brand">{item.brand || 'Unknown Brand'}</p>
+                              <p className={`product-price ${isPremium ? 'premium' : 'affordable'}`}>
+                                  {item.price && typeof item.price === 'string' && item.price.includes('$')
+                                      ? item.price
+                                      : (typeof item.price === 'number' 
+                                          ? `$${item.price.toFixed(2)}` 
+                                          : 'Price Unavailable')}
+                              </p>
+                              <a 
+                                  href={item.productUrl || `https://www.google.com/search?q=${encodeURIComponent(item.brand + ' ' + (item.description || 'fashion item'))}`} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer" 
+                                  className="product-button"
+                              >
+                                  View Product
+                              </a>
+                          </div>
+                      </div>
+                  );
               })}
             </div>
           )}
