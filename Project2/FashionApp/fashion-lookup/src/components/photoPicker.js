@@ -6,155 +6,137 @@ import './imageupload.css';
 
 const GooglePhotoPicker = () => {
     const [apiLoaded, setApiLoaded] = useState(false);
-    const [pickerLoaded, setPickerLoaded] = useState(false);
     const [error, setError] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
     const [status, setStatus] = useState('Initializing...');
     const { currentUser } = useAuth();
     const navigate = useNavigate();
     
-    // Use environment variables with fallbacks
-    const CLIENT_ID = process.env.REACT_APP_FIREBASE_CLIENT_ID;
-    const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
+    // Use the correct environment variable names
+    const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
     const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
 
+    // Load the required Google APIs
     useEffect(() => {
-        // Load Google API Client
-        const loadGoogleApi = () => {
-            setStatus('Loading Google API...');
-            
-            // First load the main Google API
+        // Step 1: Load the Google API Platform Library
+        setStatus('Loading Google platform...');
+        const loadGooglePlatform = () => {
+            const script = document.createElement('script');
+            script.src = 'https://accounts.google.com/gsi/client';
+            script.async = true;
+            script.defer = true;
+            script.onload = () => {
+                setStatus('Google platform loaded, loading picker...');
+                loadPickerAPI();
+            };
+            script.onerror = () => {
+                setError('Failed to load Google Identity Services');
+            };
+            document.body.appendChild(script);
+        };
+
+        // Step 2: Load the Google Picker API
+        const loadPickerAPI = () => {
             const script = document.createElement('script');
             script.src = 'https://apis.google.com/js/api.js';
             script.async = true;
+            script.defer = true;
             script.onload = () => {
-                setStatus('API script loaded, loading client...');
-                // Load the client library first
-                window.gapi.load('client', {
-                    callback: () => {
-                        setStatus('Client loaded, initializing...');
-                        // Initialize the client
-                        window.gapi.client.init({
-                            apiKey: API_KEY,
-                            clientId: CLIENT_ID,
-                            scope: SCOPES,
-                            discoveryDocs: ['https://photoslibrary.googleapis.com/$discovery/rest?version=v1']
-                        }).then(() => {
-                            setStatus('Client initialized, loading auth...');
-                            // Load auth2 next
-                            return new Promise((resolve, reject) => {
-                                window.gapi.load('auth2', {
-                                    callback: resolve,
-                                    onerror: reject
-                                });
-                            });
-                        }).then(() => {
-                            setStatus('Auth loaded, initializing auth...');
-                            // Initialize auth2
-                            return window.gapi.auth2.init({
-                                client_id: CLIENT_ID,
-                                scope: SCOPES
-                            });
-                        }).then(() => {
-                            setStatus('Auth initialized, API ready');
-                            setApiLoaded(true);
-                            
-                            // Now load the Picker API
-                            loadPickerApi();
-                        }).catch(err => {
-                            console.error('Client init error:', err);
-                            setError(`Error initializing Google API client: ${err.details || err.message || 'Unknown error'}`);
-                        });
-                    },
-                    onerror: (err) => {
-                        console.error('Error loading client:', err);
-                        setError('Failed to load Google client API');
-                    }
-                });
-            };
-            script.onerror = () => setError('Failed to load Google API script');
-            document.body.appendChild(script);
-        };
-        
-        // Load the Google Picker API (needs to be loaded separately)
-        const loadPickerApi = () => {
-            setStatus('Loading Picker API...');
-            const script = document.createElement('script');
-            script.src = 'https://apis.google.com/js/api.js?onload=onApiLoad';
-            script.async = true;
-            
-            // Define the callback
-            window.onApiLoad = () => {
                 window.gapi.load('picker', {
                     callback: () => {
-                        setStatus('Picker API loaded successfully');
-                        setPickerLoaded(true);
-                    },
-                    onerror: (err) => {
-                        console.error('Error loading picker API:', err);
-                        setError('Failed to load Google Picker API');
+                        setStatus('Picker API loaded, loading client API...');
+                        loadClientAPI();
                     }
                 });
             };
-            
-            script.onerror = () => setError('Failed to load Google Picker API script');
+            script.onerror = () => {
+                setError('Failed to load Google Picker API');
+            };
             document.body.appendChild(script);
         };
-        
-        loadGoogleApi();
-        
-        // Cleanup function
-        return () => {
-            // Clean up any global callbacks
-            window.onApiLoad = undefined;
-        };
-    }, [API_KEY, CLIENT_ID]);
-    
-    const openPhotoPicker = () => {
-        if (!apiLoaded || !pickerLoaded) {
-            setError('Google APIs not fully loaded yet. Please try again in a moment.');
-            return;
-        }
-        
-        setStatus('Authenticating...');
-        
-        if (!window.gapi || !window.gapi.auth2) {
-            setError('Google Auth API not loaded properly');
-            return;
-        }
-        
-        const auth2 = window.gapi.auth2.getAuthInstance();
-        
-        // Check if already signed in
-        if (!auth2.isSignedIn.get()) {
-            auth2.signIn().then(() => {
-                setStatus('Authenticated, opening picker...');
-                showPicker();
-            }).catch(err => {
-                console.error('Auth error:', err);
-                setError(`Authentication failed: ${err.details || err.message || 'User cancelled'}`);
+
+        // Step 3: Load the Google API Client Library
+        const loadClientAPI = () => {
+            window.gapi.load('client', {
+                callback: async () => {
+                    try {
+                        await window.gapi.client.init({
+                            apiKey: API_KEY,
+                            discoveryDocs: ['https://photoslibrary.googleapis.com/$discovery/rest?version=v1']
+                        });
+                        setStatus('All Google APIs loaded successfully');
+                        setApiLoaded(true);
+                    } catch (err) {
+                        console.error('Error initializing client API:', err);
+                        setError(`Error initializing Google client: ${err.message || 'Unknown error'}`);
+                    }
+                },
+                onerror: (err) => {
+                    console.error('Error loading client API:', err);
+                    setError('Failed to load Google client API');
+                }
             });
-        } else {
-            setStatus('Already authenticated, opening picker...');
-            showPicker();
+        };
+
+        loadGooglePlatform();
+    }, [API_KEY]);
+
+    // Handle opening the Google Photos picker
+    const openPhotoPicker = async () => {
+        if (!apiLoaded) {
+            setError('Google APIs not fully loaded yet');
+            return;
+        }
+
+        try {
+            setStatus('Requesting authorization...');
+            
+            // Check if the google object is available
+            if (!window.google || !window.google.accounts || !window.google.accounts.oauth2) {
+                setError('Google Identity Services not properly loaded');
+                return;
+            }
+            
+            // Use the newer Google Identity Services for authentication
+            const tokenClient = window.google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: async (tokenResponse) => {
+                    if (tokenResponse.error) {
+                        setError(`Authentication error: ${tokenResponse.error}`);
+                        return;
+                    }
+                    
+                    // Successfully obtained access token, now create the picker
+                    const accessToken = tokenResponse.access_token;
+                    createAndShowPicker(accessToken);
+                }
+            });
+            
+            // Request an access token
+            tokenClient.requestAccessToken();
+            
+        } catch (err) {
+            console.error('Authentication error:', err);
+            setError(`Failed to authenticate: ${err.message || 'Unknown error'}`);
         }
     };
-    
-    const showPicker = () => {
+
+    // Create and display the picker with the access token
+    const createAndShowPicker = (accessToken) => {
         if (!window.google || !window.google.picker) {
             setError('Picker API not loaded properly');
             return;
         }
         
         try {
-            const auth2 = window.gapi.auth2.getAuthInstance();
-            const user = auth2.currentUser.get();
-            const oauthToken = user.getAuthResponse().access_token;
+            setStatus('Opening Photos picker...');
             
             const picker = new window.google.picker.PickerBuilder()
                 .setTitle('Select an image from Google Photos')
                 .addView(new window.google.picker.PhotosView())
-                .setOAuthToken(oauthToken)
+                .setOAuthToken(accessToken)
                 .setDeveloperKey(API_KEY)
                 .setCallback(pickerCallback)
                 .setSize(800, 600)
@@ -168,12 +150,13 @@ const GooglePhotoPicker = () => {
         }
     };
     
+    // Handle the user's selection from the picker
     const pickerCallback = async (data) => {
         if (data.action === window.google.picker.Action.PICKED) {
             const document = data.docs[0];
             console.log('Selected document:', document);
             
-            // Extract the image URL from the document
+            // Extract the image URL
             let imageUrl = document.url;
             if (!imageUrl && document.thumbnails && document.thumbnails.length > 0) {
                 // Use the highest resolution thumbnail available
@@ -196,6 +179,7 @@ const GooglePhotoPicker = () => {
         }
     };
     
+    // Process the selected image for analysis
     const processSelectedImage = async (imageUrl) => {
         try {
             setStatus('Processing selected image...');
@@ -226,16 +210,16 @@ const GooglePhotoPicker = () => {
         <div className="google-photos-container">
             <button 
                 onClick={openPhotoPicker}
-                disabled={!apiLoaded || !pickerLoaded}
+                disabled={!apiLoaded}
                 className="analyze-button"
                 style={{ marginTop: '10px' }}
             >
-                {apiLoaded && pickerLoaded 
+                {apiLoaded 
                     ? "Select from Google Photos" 
                     : `Loading Google Photos... (${status})`}
             </button>
             
-            {(!apiLoaded || !pickerLoaded) && !error && (
+            {!apiLoaded && !error && (
                 <div className="status-message" style={{ fontSize: '14px', color: '#777', marginTop: '5px' }}>
                     {status}
                 </div>
