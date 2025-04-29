@@ -68,31 +68,31 @@ async function generateAlternatives(imageUrl, visionResults) {
         const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
         const prompt = `
-Analyze this fashion outfit image using the following information:
+            Analyze this fashion outfit image using the following information:
 
-Labels: ${detectedLabels}
-Objects: ${detectedObjects}
+            Labels: ${detectedLabels}
+            Objects: ${detectedObjects}
 
-For each detected clothing item:
-- Identify exact product type (e.g., "linen oxford shirt", "chino pants", "Chelsea boots")
-- Suggest at least 3-5 premium (expensive) products ($80-300) and 3-5 affordable products ($20-80)
-- Provide realistic product names and actual brand names
-- Keep the JSON structure simple
+            For each detected clothing item:
+            - Identify exact product type (e.g., "linen oxford shirt", "chino pants", "Chelsea boots")
+            - Suggest at least 3-5 premium (expensive) products ($80-300) and 3-5 affordable products ($20-80)
+            - Provide realistic product names and actual brand names
+            - Keep the JSON structure simple
 
-Strictly output only valid JSON, matching this format:
-{
-  "detectedItems": [
-    { "type": "Shirt", "description": "Light blue linen oxford shirt" }
-  ],
-  "expensiveOptions": [
-    { "brand": "Brooks Brothers", "description": "Regent Fit Dress Shirt" }
-  ],
-  "affordableOptions": [
-    { "brand": "Uniqlo", "description": "Easy Care Dress Shirt" }
-  ]
-}
-Only Return JSON,Do not add extra commentary.
-`;
+            Strictly output only valid JSON, matching this format:
+            {
+            "detectedItems": [
+                { "type": "Shirt", "description": "Light blue linen oxford shirt" }
+            ],
+            "expensiveOptions": [
+                { "brand": "Brooks Brothers", "description": "Regent Fit Dress Shirt" }
+            ],
+            "affordableOptions": [
+                { "brand": "Uniqlo", "description": "Easy Care Dress Shirt" }
+            ]
+            }
+            Only Return JSON,Do not add extra commentary.
+            `;
 
 
         const result = await model.generateContent(prompt);
