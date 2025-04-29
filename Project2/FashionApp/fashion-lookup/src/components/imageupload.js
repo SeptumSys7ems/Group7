@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import GooglePhotosPicker from './photoPicker.js';
+import GooglePhotosPicker from './GooglePhotosPicker';
 import axios from 'axios';
 import './imageupload.css';
 
@@ -126,7 +126,7 @@ function ImageUpload({ onImageAnalyzed, onSuccess }) {
                 />
             </div>
 
-            <div className="">
+            <div className="GooglePhotosPicker">
                 <GooglePhotosPicker />
             </div>
             {error && <p className="upload-error">{error}</p>}
