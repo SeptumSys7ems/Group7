@@ -7,9 +7,9 @@ const fs = require('fs');
 const authenticateUser = require('../middleware/auth');
 
 const uploadsDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-}
+// if (!fs.existsSync(uploadsDir)) {
+//     fs.mkdirSync(uploadsDir, { recursive: true });
+// }
 
 function sanitizeFilename(filename) {
     return filename.replace(/[^a-zA-Z0-9.-]/g, '_');
