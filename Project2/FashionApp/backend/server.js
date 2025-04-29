@@ -4,7 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const admin = require('firebase-admin');
 const path = require('path');
-const multer = require('multer');
+// const multer = require('multer');
 const uploadRoutes = require('./routes/upload');
 
 dotenv.config();
@@ -35,7 +35,7 @@ admin.initializeApp({
 const app = express();
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: ['*','http://localhost:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],

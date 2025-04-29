@@ -17,8 +17,21 @@ env_variables:
 
 network:
   session_affinity: true 
+  instance_tag: backend
+  forwarded_ports:
+    - 8080
 
 handlers:
   - url: /.*
     secure: always
     script: auto
+
+resources:
+  cpu: 2
+  memory_gb: 1
+  disk_size_gb: 10
+
+health_check:
+  enable_health_check: true
+  check_interval_sec: 5
+  timeout_sec: 4
