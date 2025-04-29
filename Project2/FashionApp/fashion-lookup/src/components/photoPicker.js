@@ -250,7 +250,7 @@ const GooglePhotoPicker = () => {
                 </div>
             )}
 
-            <div style={{ marginTop: '20px', fontSize: '12px', color: '#777' }}>
+            {/* <div style={{ marginTop: '20px', fontSize: '12px', color: '#777' }}>
                 <strong>Debug Logs:</strong>
                 <ul style={{ maxHeight: '200px', overflowY: 'scroll', listStyle: 'none', padding: 0 }}>
                     {debugLogs.map((log, idx) => (
@@ -260,7 +260,7 @@ const GooglePhotoPicker = () => {
                 <button onClick={downloadLogs} className="download-log-button" style={{ marginTop: '10px' }}>
                     Download Debug Logs
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 };
