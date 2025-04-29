@@ -1,76 +1,71 @@
-
+// Import necessary modules
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const admin = require('firebase-admin');
 const path = require('path');
-// const multer = require('multer');
-const uploadRoutes = require('./routes/upload');
 
+// Load environment variables from .env file
 dotenv.config();
 
-// Firebase setup
-
-// admin.initializeApp({
-//     credential: admin.credential.cert({
-//         projectId: process.env.FIREBASE_PROJECT_ID,
-//         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-//         privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-//     }),
-//     storageBucket: process.env.FIREBASE_STORAGE_BUCKET
-// });
-
-admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET
-});
-
-// const serviceAccount = require('./services/creds.json');
-
-// admin.initializeApp({
-//     credential: admin.credential.cert(serviceAccount),
-//     storageBucket: process.env.FIREBASE_STORAGE_BUCKET
-// });
-
+// Initialize Express app
 const app = express();
 
+// Initialize Firebase Admin SDK
+admin.initializeApp({
+    credential: admin.credential.applicationDefault(), // Uses application default credentials (e.g., from Google Cloud)
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET // Set storage bucket from environment
+});
+
+// CORS configuration
 const corsOptions = {
-    origin: ['*', 'http://localhost:3000', 'https://frontend-dot-fashionthief-a6f61.uc.r.appspot.com'],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    optionsSuccessStatus: 200
+    origin: ['http://localhost:3000', 'https://frontend-dot-fashionthief-a6f61.uc.r.appspot.com'], // Allowlisted origins
+    credentials: true, // Allow cookies/auth headers
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed request headers
+    optionsSuccessStatus: 200 // For legacy browsers (IE11, etc.) that choke on 204
 };
 
+// Apply CORS middleware
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+app.options('*', cors(corsOptions)); // Enable pre-flight across-the-board
+
+// Middleware to parse incoming requests with JSON payloads and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// const uploadsDir = path.join(__dirname, 'uploads');
-// const fs = require('fs');
-// if (!fs.existsSync(uploadsDir)) {
-//     fs.mkdirSync(uploadsDir, { recursive: true });
-// }
-
+// Serve static files from the "uploads" directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Import route handlers
 const authRoutes = require('./routes/auth');
 const photoRoutes = require('./routes/photos');
 const analysisRoutes = require('./routes/analysis');
+const uploadRoutes = require('./routes/upload');
 
-app.use('/api/auth', authRoutes);
-app.use('/api/photos', photoRoutes);
-app.use('/api/analysis', analysisRoutes);
-app.use('/api/upload', uploadRoutes);
+// Setup API routes
+app.use('/api/auth', authRoutes); // Authentication routes
+app.use('/api/photos', photoRoutes); // Photo handling routes
+app.use('/api/analysis', analysisRoutes); // Image analysis routes
+app.use('/api/upload', uploadRoutes); // Upload-related routes
 
+// Global error handling middleware
 app.use((err, req, res, next) => {
     console.error('Server error:', err);
     res.status(500).json({ error: 'Internal server error' });
 });
 
+// Start the server
 const PORT = process.env.PORT || 8080;
-
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server listening on port ${PORT}`);
 });
+
+/*
+=================
+Commented Out Code (Optional):
+=================
+- multer setup for local uploads (if needed)
+- Firebase Admin initialization with service account credentials
+- Directory creation for uploads if it doesn't exist
+*/
