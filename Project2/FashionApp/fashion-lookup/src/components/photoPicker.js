@@ -15,7 +15,14 @@ const GooglePhotoPicker = () => {
 
     const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
-    const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
+    // const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
+
+    const SCOPES = [
+        'https://www.googleapis.com/auth/photoslibrary.readonly', 
+        'https://www.googleapis.com/auth/drive.readonly',
+        'https://www.googleapis.com/auth/drive.file',
+        'https://www.googleapis.com/auth/photospicker.mediaitems.readonly'
+      ].join(' ');
 
     // let tokenClient = null; // tokenClient is outside of component internals
 
@@ -117,7 +124,8 @@ const GooglePhotoPicker = () => {
                 }
             });
         }
-    }, [apiLoaded]);
+    }, [apiLoaded, CLIENT_ID, SCOPES]);
+    
 
     const openPhotoPicker = () => {
         debug('Photo picker button clicked.');
@@ -145,7 +153,8 @@ const GooglePhotoPicker = () => {
             const picker = new window.google.picker.PickerBuilder()
                 .addView(photosView)
                 .setOAuthToken(accessToken)
-                .setDeveloperKey(API_KEY)
+                .setDeveloperKey(process.env.REACT_APP_GOOGLE_API_KEY)
+                // .setDeveloperKey(API_KEY)
                 .setCallback(pickerCallback)
                 .build();
 

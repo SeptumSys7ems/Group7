@@ -2,6 +2,7 @@
 ├── backend
 │   ├── middleware
 │   │   └── auth.js
+│   ├── package-lock.json
 │   ├── package.json
 │   ├── routes
 │   │   ├── analysis.js
@@ -10,9 +11,28 @@
 │   │   └── upload.js
 │   ├── server.js
 │   ├── services
+│   │   ├── creds.json
+│   │   ├── creds.json.gpg
 │   │   ├── gemini.js
 │   │   └── vision.js
+│   ├── t.env
 │   └── uploads
+│       ├── 8j4BOFwwSjTVBfYQB9WuA8G9vY02
+│       │   ├── 1745816626678-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745816709555-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745817118190-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745817225136-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745817845622-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745817886536-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745821383349-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745821495302-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745821527269-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745821698105-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745821768434-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745822185672-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745822637795-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   ├── 1745822702849-Screenshot_2025-04-27_at_10.00.13___PM.png
+│       │   └── 1745822960982-Screenshot_2025-04-27_at_10.00.13___PM.png
 │       └── ajA6QfuwVvWDyNyDc6X9PVFGlci2
 │           ├── 1744945992475-GF-507-1.jpg
 │           ├── 1744946063427-GF-507-1.jpg
@@ -20,6 +40,7 @@
 │           └── 1744946505904-GF-507-1.jpg
 ├── fashion-lookup
 │   ├── README.md
+│   ├── package-lock.json
 │   ├── package.json
 │   ├── public
 │   │   ├── favicon.ico
@@ -28,33 +49,58 @@
 │   │   ├── logo512.png
 │   │   ├── manifest.json
 │   │   └── robots.txt
-│   └── src
-│       ├── App.css
-│       ├── App.js
-│       ├── App.test.js
-│       ├── components
-│       │   ├── dashboard.css
-│       │   ├── dashboard.js
-│       │   ├── history.css
-│       │   ├── history.js
-│       │   ├── imageupload.css
-│       │   ├── imageupload.js
-│       │   ├── login.css
-│       │   ├── login.js
-│       │   ├── navbar.css
-│       │   ├── navbar.js
-│       │   ├── results.css
-│       │   └── results.js
-│       ├── contexts
-│       │   └── AuthContext.js
-│       ├── firebase.js
-│       ├── index.css
-│       ├── index.js
-│       ├── logo.svg
-│       ├── reportWebVitals.js
-│       ├── services
-│       │   └── api.js
-│       └── setupTests.js
-└── tree.txt
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.js
+│   │   ├── App.test.js
+│   │   ├── assets
+│   │   │   ├── FashionLogo.js
+│   │   │   └── logoR.png
+│   │   ├── components
+│   │   │   ├── aboutpage.css
+│   │   │   ├── aboutpage.js
+│   │   │   ├── contactpage.css
+│   │   │   ├── contactpage.js
+│   │   │   ├── dashboard.css
+│   │   │   ├── dashboard.js
+│   │   │   ├── feedpage.css
+│   │   │   ├── feedpage.js
+│   │   │   ├── history.css
+│   │   │   ├── history.js
+│   │   │   ├── imageupload.css
+│   │   │   ├── imageupload.js
+│   │   │   ├── login.css
+│   │   │   ├── login.js
+│   │   │   ├── mainlayout.css
+│   │   │   ├── mainlayout.js
+│   │   │   ├── navbar.css
+│   │   │   ├── navbar.js
+│   │   │   ├── photoPicker.js
+│   │   │   ├── post.css
+│   │   │   ├── post.js
+│   │   │   ├── profilepage.css
+│   │   │   ├── profilepage.js
+│   │   │   ├── results.css
+│   │   │   └── results.js
+│   │   ├── contexts
+│   │   │   └── AuthContext.js
+│   │   ├── firebase.js
+│   │   ├── index.css
+│   │   ├── index.js
+│   │   ├── logo.svg
+│   │   ├── reportWebVitals.js
+│   │   ├── services
+│   │   │   ├── ap.js.dw
+│   │   │   ├── api.js
+│   │   │   └── apio.js.dw
+│   │   └── setupTests.js
+│   └── t.env
+├── firebase.json
+├── firestore.indexes.json
+├── firestore.rules
+├── public
+│   └── index.html
+├── storage.rules
+└── treeStructure.txt
 
-13 directories, 45 files
+16 directories, 88 files
