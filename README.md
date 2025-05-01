@@ -4,7 +4,8 @@ Fashion Lookup is an AI-powered web application that helps users find affordable
 By leveraging Google Cloud Vision API for image analysis and Google's Gemini AI for generating fashion recommendations,
 the application provides users with budget-friendly options for their favorite styles.
 
-![Fashion Lookup App]([https://frontend-dot-fashionthief-a6f61.uc.r.appspot.com/]))
+![Fashion Lookup App](https://frontend-dot-fashionthief-a6f61.uc.r.appspot.com/))
+
 
 ## Features
 
